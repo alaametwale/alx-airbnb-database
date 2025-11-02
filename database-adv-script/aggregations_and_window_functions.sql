@@ -21,3 +21,8 @@ LEFT JOIN bookings
 GROUP BY properties.id, properties.name
 ORDER BY row_number;
 
+EXPLAIN SELECT * FROM bookings WHERE user_id = 5;
+Seq Scan on bookings  (cost=0.00..350.00 rows=50 width=...)
+CREATE INDEX idx_bookings_user_id ON bookings(user_id);
+EXPLAIN SELECT * FROM bookings WHERE user_id = 5;
+Index Scan using idx_bookings_user_id on bookings  (cost=0.12..8.50 rows=3 width=...)
