@@ -1,17 +1,19 @@
--- Create indexes to improve query performance
+-- Task 3: Implement Indexes for Optimization
 
-CREATE INDEX idx_users_email
-ON users(email);
+-- 1. Index on Users table
+-- Index the 'email' column for faster user lookup (e.g., login or search)
+CREATE INDEX idx_user_email ON Users(email);
 
-CREATE INDEX idx_bookings_user_id
-ON bookings(user_id);
+-- 2. Indexes on Bookings table
+-- Index the 'user_id' column, heavily used for joins with the Users table (e.g., Task 0 and 1)
+CREATE INDEX idx_bookings_user_id ON Bookings(user_id);
 
-CREATE INDEX idx_bookings_property_id
-ON bookings(property_id);
+-- Index the 'property_id' column, heavily used for joins with the Properties table and filtering
+CREATE INDEX idx_bookings_property_id ON Bookings(property_id);
 
-CREATE INDEX idx_properties_name
-ON properties(name);
+-- Index 'start_date' for efficient range queries (e.g., finding bookings in a specific month or week)
+CREATE INDEX idx_bookings_start_date ON Bookings(start_date);
 
--- Check performance before and after using EXPLAIN or ANALYZE
-EXPLAIN SELECT * FROM bookings WHERE user_id = 1;
-ANALYZE SELECT * FROM bookings WHERE user_id = 1;
+-- 3. Index on Property table
+-- Index the 'host_id' column for finding properties owned by a specific host
+CREATE INDEX idx_property_host_id ON Properties(host_id);
