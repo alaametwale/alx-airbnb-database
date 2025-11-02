@@ -1,33 +1,34 @@
--- 0. اكتب استعلاما باستخدام FULL OUTER JOIN لاسترداد جميع المستخدمين وجميع الحجوزات، حتى إذا لم يكن لدى المستخدم حجز أو لم يكن الحجز مرتبطا بمستخدم.
--- (في MySQL، نستخدم UNION بين LEFT JOIN و RIGHT JOIN لتحقيق FULL OUTER JOIN)
+-- 1. Retrieve all bookings and the respective users who made those bookings
+SELECT 
+    bookings.id AS booking_id,
+    bookings.property_id,
+    bookings.start_date,
+    bookings.end_date,
+    users.id AS user_id,
+    users.name AS user_name,
+    users.email
+FROM bookings
+INNER JOIN users
+ON bookings.user_id = users.id;
 
--- الجزء الأول: LEFT JOIN (يجلب جميع المستخدمين + حجوزاتهم المطابقة)
-SELECT
-    U.id AS user_id, 
-    U.first_name, 
-    B.id AS booking_id,
-    B.property_id
-FROM 
-    users AS U
-LEFT JOIN 
-    bookings AS B 
-ON 
-    U.id = B.user_id
+-- 2. Retrieve all properties and their reviews (including those without reviews)
+SELECT 
+    properties.id AS property_id,
+    properties.name AS property_name,
+    reviews.id AS review_id,
+    reviews.rating,
+    reviews.comment
+FROM properties
+LEFT JOIN reviews
+ON properties.id = reviews.property_id;
 
-UNION 
-
--- الجزء الثاني: RIGHT JOIN (يجلب جميع الحجوزات + المستخدمين المطابقين)
--- هذا الجزء ضروري لجلب الحجوزات التي ليس لها مستخدم مطابق (حجز يتيم)، والتي قد تكون نادرة في الواقع
-SELECT
-    U.id AS user_id, 
-    U.first_name, 
-    B.id AS booking_id,
-    B.property_id
-FROM 
-    users AS U
-RIGHT JOIN 
-    bookings AS B 
-ON 
-    U.id = B.user_id
--- لا نحتاج إلى إضافة شرط WHERE هنا لأن UNION تزيل التكرارات تلقائياً
-;
+-- 3. Retrieve all users and all bookings, even if user has no booking
+SELECT 
+    users.id AS user_id,
+    users.name AS user_name,
+    bookings.id AS booking_id,
+    bookings.start_date,
+    bookings.end_date
+FROM users
+FULL OUTER JOIN bookings
+ON users.id = bookings.user_id;
