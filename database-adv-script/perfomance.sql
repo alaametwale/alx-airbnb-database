@@ -1,6 +1,8 @@
 -- perfomance.sql
+-- Analyze the query performance using EXPLAIN
 -- Complex query that retrieves all bookings with user, property, and payment details
 
+EXPLAIN ANALYZE
 SELECT 
     b.id AS booking_id,
     b.start_date,
