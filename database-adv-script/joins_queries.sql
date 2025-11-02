@@ -20,7 +20,9 @@ SELECT
     reviews.comment AS review_comment
 FROM properties
 LEFT JOIN reviews
-    ON properties.id = reviews.property_id;
+    ON properties.id = reviews.property_id
+ORDER BY properties.id;
+
 
 -- 3. Retrieve all users and all bookings, even if user has no booking
 SELECT 
